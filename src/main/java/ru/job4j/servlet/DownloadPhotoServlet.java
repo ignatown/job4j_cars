@@ -12,8 +12,8 @@ public class DownloadPhotoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name = req.getParameter("name");
-        File downloadFile = new File("../photos/default");
-        for (File file : new File("../photos/").listFiles()) {
+        File downloadFile = new File("../images/default");
+        for (File file : new File("../images/").listFiles()) {
             if (name.equals(file.getName())) {
                 downloadFile = file;
                 break;

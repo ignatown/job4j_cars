@@ -13,6 +13,11 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("login.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = HbnStore.instOf().findUserByEmail(req.getParameter("email"));
         if (user != null && user.getPassword().equals(req.getParameter("password"))) {
             HttpSession sc = req.getSession();
@@ -21,10 +26,5 @@ public class LoginServlet extends HttpServlet {
         } else {
             req.getRequestDispatcher("login.jsp").forward(req, resp);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("login.jsp").forward(req, resp);
     }
 }

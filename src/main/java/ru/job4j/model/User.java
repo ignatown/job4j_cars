@@ -1,20 +1,19 @@
 package ru.job4j.model;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    @Column(unique = true)
     private String email;
     private String password;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ad> adList;
+    private Set<Ad> ads = new HashSet<>();
 
     public static User of(String name, String email, String password) {
         User user = new User();
@@ -54,6 +53,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Ad> getAds() {
+        return ads;
+    }
+
+    public void setAds(Set<Ad> ads) {
+        this.ads = ads;
     }
 
     @Override

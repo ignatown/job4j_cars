@@ -4,22 +4,23 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "ads")
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand_id", nullable = false)
+    @JoinColumn(name = "brands_id", nullable = false)
     private Brand brand;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "body_id", nullable = false)
+    @JoinColumn(name = "bodies_id", nullable = false)
     private Body body;
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "users_id", nullable = false)
     private User user;
     private boolean status;
 
@@ -29,6 +30,14 @@ public class Ad {
         ad.user = user;
         ad.status = status;
         return ad;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Brand getBrand() {

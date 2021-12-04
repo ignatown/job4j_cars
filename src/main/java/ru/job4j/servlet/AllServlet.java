@@ -13,8 +13,8 @@ import java.util.List;
 public class AllServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    List<Ad> adList = HbnStore.instOf().findAllAds();
-    req.setAttribute("ads", adList);
-    req.getRequestDispatcher("all.jsp").forward(req, resp);
+        List<Ad> adList = HbnStore.instOf().findAllAds();
+        req.setAttribute("ads", adList);
+        req.getRequestDispatcher("all.jsp").forward(req, resp);
     }
 }

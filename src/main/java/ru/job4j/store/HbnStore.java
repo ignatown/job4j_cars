@@ -52,14 +52,14 @@ public class HbnStore implements Store, AutoCloseable {
     @Override
     public List<Ad> findAllAds() {
         return wrpSession(session -> session.createQuery("from Ad a "
-                + "left join a.body left join a.brand left join a.user")
+                + "left join fetch a.body left join fetch a.brand left join fetch a.user")
                 .list());
     }
 
     @Override
     public List<Ad> findAdsForUser(int id) {
         return wrpSession(session -> session.createQuery("from Ad a "
-                + "left join a.body left join a.brand left join a.user where a.id=:id")
+                + "left join fetch a.body left join fetch a.brand left join fetch a.user where a.user.id=:id")
                 .setParameter("id", id)
                 .list());
     }
@@ -83,17 +83,16 @@ public class HbnStore implements Store, AutoCloseable {
 
     @Override
     public User findUserByEmail(String email) {
-        return (User) wrpSession(session -> session.createQuery("from User where email = :email")
-                .setParameter("email", email));
+        return (User) wrpSession(session -> session.createQuery("from User where email=:email")
+                .setParameter("email", email).uniqueResult()
+        );
     }
 
     @Override
     public void addAd(Ad ad, String[] bodyId, String[] brandId) {
         wrpSession(session -> {
-            Body body = session.find(Body.class, Integer.parseInt(bodyId[0]));
-            Brand brand = session.find(Brand.class, Integer.parseInt(brandId[0]));
-            ad.setBody(body);
-            ad.setBrand(brand);
+            ad.setBody(session.find(Body.class, Integer.parseInt(bodyId[0])));
+            ad.setBrand(session.find(Brand.class, Integer.parseInt(brandId[0])));
             session.save(ad);
             return true;
         });
@@ -101,7 +100,9 @@ public class HbnStore implements Store, AutoCloseable {
 
     @Override
     public void deleteAd(int id) {
-        wrpSession(session -> session.createQuery("delete Ad where id=:id"))
-                .setParameter("id", id).executeUpdate();
+        wrpSession(session -> {
+            session.delete(session.find(Ad.class, id));
+            return true;
+        });
     }
 }
