@@ -1,6 +1,7 @@
 package ru.job4j.model;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -23,13 +24,34 @@ public class Ad {
     @JoinColumn(name = "users_id", nullable = false)
     private User user;
     private boolean status;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeOfCreated;
+    private boolean hasPhoto;
 
     public static Ad of(String description, User user, boolean status) {
         Ad ad = new Ad();
         ad.description = description;
         ad.user = user;
         ad.status = status;
+        ad.timeOfCreated = new Date(System.currentTimeMillis());
+        ad.hasPhoto = false;
         return ad;
+    }
+
+    public Date getTimeOfCreated() {
+        return timeOfCreated;
+    }
+
+    public void setTimeOfCreated(Date timeOfCreated) {
+        this.timeOfCreated = timeOfCreated;
+    }
+
+    public boolean isHasPhoto() {
+        return hasPhoto;
+    }
+
+    public void setHasPhoto(boolean hasPhoto) {
+        this.hasPhoto = hasPhoto;
     }
 
     public int getId() {

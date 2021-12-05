@@ -16,4 +16,8 @@ public interface Store {
     User findUserByEmail(String email);
     void addAd(Ad ad, String[] bodyId, String[] brandId);
     void deleteAd(int id);
+    List<Ad> findAdsByToday();
+    List<Ad> findAdsByBrand(String brandName);
+    List<Ad> findAdsWithPhoto();
+    void updatePhotoStatus(int userId, int itemId);
 }

@@ -105,4 +105,35 @@ public class HbnStore implements Store, AutoCloseable {
             return true;
         });
     }
+
+    @Override
+    public List<Ad> findAdsByToday() {
+       return wrpSession(session -> session.createQuery("from Ad "
+                + "where day(current_timestamp - timeOfCreated) <= 1")
+                .list());
+    }
+
+    @Override
+    public List<Ad> findAdsByBrand(String brandName) {
+        return wrpSession(session -> session.createQuery("from Ad a "
+                + "where a.brand=:brand"))
+                .setParameter("brand", brandName)
+                .list();
+    }
+
+    @Override
+    public List<Ad> findAdsWithPhoto() {
+        return wrpSession(session -> session.createQuery("from Ad "
+                + " where hasPhoto = true"))
+                .list();
+    }
+
+    @Override
+    public void updatePhotoStatus(int userId, int itemId) {
+        wrpSession(session -> session.createQuery("update Ad "
+                + "set hasPhoto = true where id=:itemId and user.id=:userId"))
+                .setParameter("userId", userId)
+                .setParameter("itemId", itemId)
+                .executeUpdate();
+    }
 }
